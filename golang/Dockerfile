@@ -1,5 +1,10 @@
 FROM golang:1.5.2
 
+# Install dependencies
+
+RUN apt-get update
+RUN apt-get install -y unzip autoconf libtool
+
 # Install linter
 
 RUN go get github.com/alecthomas/gometalinter
@@ -7,8 +12,10 @@ RUN gometalinter --install
 
 # Install protobuf
 
-RUN apt-get update && apt-get install -y protobuf-compiler
-RUN go get github.com/golang/protobuf/proto github.com/golang/protobuf/protoc-gen-go
+RUN cd /opt && git clone --depth=1 https://github.com/google/protobuf.git
+RUN cd /opt/protobuf && ./autogen.sh && ./configure && make && make check
+RUN cd /opt/protobuf && make install
+ENV LD_LIBRARY_PATH /usr/local/lib
 
-# apt-get install qtdeclarative5-dev qtbase5-private-dev qtdeclarative5-private-dev libqt5opengl5-dev qml-module-qtquick2
+RUN go get github.com/golang/protobuf/proto github.com/golang/protobuf/protoc-gen-go
 
