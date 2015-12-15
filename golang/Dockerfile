@@ -19,3 +19,6 @@ ENV LD_LIBRARY_PATH /usr/local/lib
 
 RUN go get github.com/golang/protobuf/proto github.com/golang/protobuf/protoc-gen-go
 
+# Clean-up
+
+RUN rm -rf /opt/protobuf
